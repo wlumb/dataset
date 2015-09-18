@@ -1,0 +1,57 @@
+---
+title: "PCA_Gartenhaus"
+output: html_document
+---
+
+Install some packages:
+
+```{r, eval=FALSE}
+install.packages("ggplot2")
+library(devtools)
+install_github('sinhrks/ggfortify')
+library(ggplot2)
+library(ggfortify)
+
+```
+
+Input all data and dity all data:
+
+```{r}
+require(ggplot2)
+dat <-as.matrix(read.table("/Users/leiwang/Documents/R_fold/Gartenhaus.txt", header = TRUE,row.names= 1))
+data <- log2(dat+1)
+#data <- log2(dat[,1:6]+1)
+#data <- log2(dat[,c(7,8,12,13,14,15)]+1)
+
+data1=as.data.frame(t(data)) 
+autoplot(prcomp(data1), data=data1, colour=rainbow(15),label = TRUE, shape=FALSE, label.size = 5)
+#autoplot(prcomp(data1), data=data1, colour=rainbow(6),label = TRUE, shape=FALSE, label.size = 8)
+
+```
+
+Input RNA-Seq data and dity all data:
+
+```{r, eval=FALSE}
+data <- log2(dat[,1:6]+1)
+data1=as.data.frame(t(data)) 
+autoplot(prcomp(data1), data=data1, colour=rainbow(6),label = TRUE, shape=FALSE, label.size = 8)
+```
+
+Input RIP-Seq data and dity all data:
+
+```{r, eval=FALSE}
+
+data <- log2(dat[,c(7,8,12,13,14,15)]+1)
+data1=as.data.frame(t(data)) 
+autoplot(prcomp(data1), data=data1, colour=rainbow(6),label = TRUE, shape=FALSE, label.size = 8)
+
+```
+
+only RD2, RD3, RA1, RA2:
+```{r}
+data <- log2(dat[,c(12,13,14,15)]+1)
+data1=as.data.frame(t(data)) 
+autoplot(prcomp(data1), data=data1, colour=rainbow(4),label = TRUE, shape=FALSE, label.size = 8)
+
+```
+
