@@ -1,0 +1,40 @@
+---
+title: "cgdsr_Fengjiang"
+output: html_document
+---
+
+```{r install, eval=FALSE}
+install.packages('cgdsr')
+```
+
+
+```{r}
+library(cgdsr)
+mycgds = CGDS("http://www.cbioportal.org/public-portal/")
+dat <- read.table("/Users/leiwang/Documents/R_fold/broad_tcga_tsp.txt")
+gene <-as.character(dat$V1)
+
+
+broad = getCancerStudies(mycgds)[45,1]
+tcga = getCancerStudies(mycgds)[46,1]
+tsp = getCancerStudies(mycgds)[48,1]
+
+#broad
+broadcaselist = getCaseLists(mycgds,broad)[1,1]
+broadgeneticprofile = getGeneticProfiles(mycgds,broad)[2,1]
+broad_mutation <- getMutationData(mycgds,broadcaselist,broadgeneticprofile,gene)
+write.table(broad_mutation, file="broad_mutation.xls", quote=FALSE, sep = "\t", row.names=FALSE)
+
+#tcga
+tcgacaselist = getCaseLists(mycgds,tcga)[2,1]
+tcgageneticprofile = getGeneticProfiles(mycgds,tcga)[8,1]
+tcga_mutation <- getMutationData(mycgds,tcgacaselist,tcgageneticprofile,gene)
+write.table(tcga_mutation, file="tcga_mutation.xls", quote=FALSE, sep = "\t", row.names=FALSE)
+
+#tsp
+tspcaselist = getCaseLists(mycgds,tsp)[1,1]
+tspgeneticprofile = getGeneticProfiles(mycgds,tsp)[1,1]
+tsp_mutation <- getMutationData(mycgds,tspcaselist,tspgeneticprofile,gene)
+write.table(tsp_mutation, file="tsp_mutation.xls", quote=FALSE, sep = "\t", row.names=FALSE)
+```
+
