@@ -1,0 +1,56 @@
+---
+title: "Copy_only_ribosomal"
+author: "wlnjseu"
+date: "October 15, 2015"
+output: html_document
+---
+## input excel file
+
+```{r}
+data <- read.delim("clipboard")
+#data <- data[,-2]
+```
+
+## tidy data and boxblot plot
+
+```{r}
+library(reshape2)
+library(ggplot2)
+data1 <-  melt(data,variable.name = "Sample", value.name = "PSM", id="Accession")
+ggplot(data1, aes(x=factor(Sample), y=PSM), fill=factor(Sample))+geom_boxplot(notch = TRUE, outlier.colour = "green", aes(fill=factor(Sample)))+ggtitle("RPS Extra and tRNA")
+
+```
+
+
+## ggplot2 graphics in a loop
+#data tidy
+
+```{r}
+mydata <- read.delim("clipboard")
+rownames(mydata) = mydata[,1]
+dat <- data.frame(t(mydata[,-1]))
+dat[is.na(dat)]<-0 
+```
+
+
+# ggplot2 barplot
+```{r}
+row.names(data) <- data[, 1]
+data<- data[, -1]
+col.names(data) <- data[1,]
+data2 <- data.frame(t(data))
+# colnames of dat
+nm <- colnames(data2)
+order_factor = factor(rownames(data2), levels = c('D2.EVF1','E2.EVF2','F2.EVF3','G2.EVF4.7','H2.M1F1','A2.M1F2','B2.M1.F3','C2.M1F4.7'))
+
+
+# seq_along() get Index of colnames
+for (i in seq_along(nm)) { 
+  
+plots <-ggplot(data2, aes(x = order_factor, y = data2[,i])) + geom_bar(stat = "identity")+xlab("sample")+ylab("PSM")+ggtitle(nm[i])
+ggsave(plots,filename=paste(nm[i], ".png", sep = ""),width = 16, height = 9)
+
+}
+```
+
+

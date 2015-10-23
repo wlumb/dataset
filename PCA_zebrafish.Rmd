@@ -1,0 +1,68 @@
+---
+title: "PCA_zebrafish"
+author: "wl_UMB"
+date: "October 22, 2015"
+output: html_document
+---
+
+
+## Using Gene FPKM for PCA
+
+```{r}
+library(ggplot2)
+library(ggfortify)
+data <-data.frame(read.table("/Users/leiwang/Documents/genes.fpkm_table", header = TRUE))
+#regulate rownames
+rownames(data) <- data[,1]
+data <- data[,-1]
+data1 =as.data.frame(t(data))
+#get Group names
+data1 = cbind.data.frame(as.factor(c(rep("A_H",3),rep("A_M",3),rep("E_H",3))),data1)
+colnames(data1)[1] = "Group"
+#PCA for A_H, A_M, E_H
+autoplot(prcomp(data1[,-1]),data=data1, colour = "Group", size=10, label = FALSE)
+#PCA for A_H, E_H
+data2 <- data1[c(1,2,3,7,8,9),]
+autoplot(prcomp(data2[,-1]), data = data2, colour ="Group", size=10,label = FALSE)
+```
+
+
+## Using transcript FPKM for PCA
+
+```{r}
+data <-data.frame(read.table("/Users/leiwang/Documents/isoforms.fpkm_table", header = TRUE))
+#regulate rownames
+rownames(data) <- data[,1]
+data <- data[,-1]
+data1 =as.data.frame(t(data))
+#get Group names
+data1 = cbind.data.frame(as.factor(c(rep("A_H",3),rep("A_M",3),rep("E_H",3))),data1)
+colnames(data1)[1] = "Group"
+#PCA for A_H, A_M, E_H
+autoplot(prcomp(data1[,-1]),data=data1, colour = "Group", size=10, label = FALSE)
+#PCA for A_H, E_H
+data2 <- data1[c(1,2,3,7,8,9),]
+autoplot(prcomp(data2[,-1]), data = data2, colour ="Group", size=10,label = FALSE)
+```
+
+
+## Using lincRNA FPKM for PCA
+
+```{r}
+data <-data.frame(read.table("/Users/leiwang/Documents/isoforms.fpkm_table", header = TRUE))
+lincRNA <- read.table("/Users/leiwang/Documents/all.lincRNA.names")
+data <- data[data$tracking_id %in% lincRNA$V1,]
+#regulate rownames
+rownames(data) <- data[,1]
+data <- data[,-1]
+data1 =as.data.frame(t(data))
+#get Group names
+data1 = cbind.data.frame(as.factor(c(rep("A_H",3),rep("A_M",3),rep("E_H",3))),data1)
+colnames(data1)[1] = "Group"
+#PCA for A_H, A_M, E_H
+autoplot(prcomp(data1[,-1]),data=data1, colour = "Group", size=10, label = FALSE)
+#PCA for A_H, E_H
+data2 <- data1[c(1,2,3,7,8,9),]
+autoplot(prcomp(data2[,-1]), data = data2, colour ="Group", size=10,label = FALSE)
+```
+
